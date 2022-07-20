@@ -13,9 +13,13 @@ if [ ! -d $TURTLEBOT_WS/src/kobuki_ros ]; then
   cd $TURTLEBOT_WS/src
 
   git clone https://github.com/stonier/sophus.git -b release/1.2.x
-  git clone https://github.com/stonier/ecl_core.git -b release/1.2.x
-  git clone https://github.com/stonier/ecl_lite.git -b release/1.1.x
+  #git clone https://github.com/stonier/ecl_core.git -b release/1.2.x
+  #git clone https://github.com/stonier/ecl_lite.git -b release/1.1.x
   git clone https://github.com/stonier/ecl_tools.git -b release/1.0.x
+
+  git clone https://github.com/CNURobotics/ecl_lite -b humble-test
+  git clone https://github.com/CNURobotics/ecl_core -b humble-test
+  git clone https://github.com/CNURobotics/kobuki_ros -b humble-test
 
   git clone https://github.com/kobuki-base/kobuki_core.git
   git clone https://github.com/kobuki-base/velocity_smoother.git
@@ -23,10 +27,10 @@ if [ ! -d $TURTLEBOT_WS/src/kobuki_ros ]; then
   
   git clone https://github.com/kobuki-base/kobuki_ros_interfaces.git
 
-   git clone https://github.com/kobuki-base/kobuki_ros.git
+  #git clone https://github.com/kobuki-base/kobuki_ros.git
 
   # Additionals
-  #git clone https://github.com/YDLIDAR/ydlidar_ros2_driver.git
+  git clone https://github.com/wn1980/ydlidar_ros2_driver.git
   git clone https://github.com/wn1980/turtlebot2_ros2.git
 
   # install ydlidar_sdk first
