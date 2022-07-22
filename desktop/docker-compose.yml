@@ -33,6 +33,7 @@ services:
       retries: 20
     environment:
       - ROS_DOMAIN_ID=50
+    cpus: 4
     #ports:
     #  - "8559:8008"
     #  - "9902:6901"
