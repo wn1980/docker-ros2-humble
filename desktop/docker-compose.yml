@@ -11,6 +11,23 @@ volumes:
 
 services:
 
+  micro-ROS-agent:
+    image: microros/micro-ros-agent:humble
+    container_name: ros2_micro_ros_agent
+    init: true
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    devices:
+      - "/dev:/dev"
+    volumes:
+      - "/dev:/dev"
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      - ROS_DOMAIN_ID=50
+    #command: serial --dev /dev/ttyUSB0 -v6
+    command: udp4 --port 8888 -v6
+
   ros2:
     build: ./image
     image: wn1980/ros2-humble${TAG}
@@ -33,7 +50,7 @@ services:
       retries: 20
     environment:
       - ROS_DOMAIN_ID=50
-    cpus: 4
+    #cpus: 4
     #ports:
     #  - "8559:8008"
     #  - "9902:6901"
