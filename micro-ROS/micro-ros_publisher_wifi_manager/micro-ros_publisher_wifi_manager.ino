@@ -1,3 +1,5 @@
+#include <WiFiManager.h>
+
 #include <micro_ros_arduino.h>
 
 #include <stdio.h>
@@ -40,8 +42,86 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
   }
 }
 
+char * str2ch(String s){
+  /*
+  int len = s.length() + 1;
+  char buff[len];
+  s.toCharArray(buff, len);
+  */
+  char buff[100];
+  s.toCharArray(buff, s.length());
+  return buff;
+}
+
 void setup() {
+  // Setup Serial Monitor
+  Serial.begin(115200);
+
+  // Create WiFiManager object
+  WiFiManager wfm;
+
+  // Supress Debug information
+  //wfm.setDebugOutput(false);
+
+  // Remove any previous network settings
+  wfm.resetSettings();
+
+  // Define a text box, 50 characters maximum
+  WiFiManagerParameter custom_text_box("Agent IP", "Enter your string here", "192.168.1.166", 50);
+
+  // Add custom parameter
+  wfm.addParameter(&custom_text_box);
+
+  if (!wfm.autoConnect("ESP32TEST_AP")) {
+    // Did not connect, print error message
+    Serial.println("failed to connect and hit timeout");
+
+    // Reset and try again
+    ESP.restart();
+    delay(1000);
+  }
+
+  // Connected!
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  //Serial.println(WiFi.SSID());
+  //Serial.println(WiFi.psk());
+  
+  // Print custom text box value to serial monitor
+  //Serial.print("Custom text box entry: ");
+  //Serial.println(custom_text_box.getValue());
+
+  //char * ssid = str2ch(WiFi.SSID().c_str());
+  //char * passwd = str2ch(WiFi.psk().c_str());
+  
+  //const char * ssid = WiFi.SSID().c_str();
+  //const char * passwd = WiFi.psk().c_str();
+
+  const char * ssid_ = WiFi.SSID().c_str();
+  const char * passwd_ = WiFi.psk().c_str();
+
+  char ssid[] = "";
+  char passwd[] = "";
+  strcpy(ssid,ssid_);
+  strcpy(passwd,passwd_);
+  
+  const char * agent_ip = custom_text_box.getValue();
+
+  //Serial.println(String(ssid));
+  //Serial.println(String(passwd));
+  //Serial.println(String(agent_ip));
+
+  Serial.println(ssid);
+  Serial.println(passwd);
+  Serial.println(agent_ip);
+  
+  //WiFi.disconnect();
+  
+  // micro-ROS setup
   set_microros_wifi_transports("ToonDuck_2.4G", "up092723", "192.168.1.166", 8888);
+  //set_microros_wifi_transports(ssid, passwd, agent_ip, 8888);
 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
