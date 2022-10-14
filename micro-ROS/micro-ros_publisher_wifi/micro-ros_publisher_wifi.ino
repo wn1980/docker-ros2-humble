@@ -41,7 +41,7 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 }
 
 void setup() {
-  set_microros_wifi_transports("ToonDuck_2.4G", "up092723", "192.168.1.166", 8888);
+  set_microros_wifi_transports("***", "***", "192.168.1.166", 8888);
 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);

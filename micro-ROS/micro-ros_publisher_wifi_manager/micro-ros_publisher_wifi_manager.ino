@@ -25,7 +25,6 @@ rcl_node_t node;
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
 
-
 void error_loop(){
   while(1){
     digitalWrite(LED_PIN, !digitalRead(LED_PIN));
@@ -42,17 +41,6 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
   }
 }
 
-char * str2ch(String s){
-  /*
-  int len = s.length() + 1;
-  char buff[len];
-  s.toCharArray(buff, len);
-  */
-  char buff[100];
-  s.toCharArray(buff, s.length());
-  return buff;
-}
-
 void setup() {
   // Setup Serial Monitor
   Serial.begin(115200);
@@ -66,13 +54,14 @@ void setup() {
   // Remove any previous network settings
   wfm.resetSettings();
 
-  // Define a text box, 50 characters maximum
-  WiFiManagerParameter custom_text_box("Agent IP", "Enter your string here", "192.168.1.166", 50);
-
   // Add custom parameter
-  wfm.addParameter(&custom_text_box);
+  WiFiManagerParameter agent_ip_text_box("agent_ip", "Agent IP", "192.168.1.166", 15);
+  WiFiManagerParameter agent_port_text_box("agent_port", "Port", "8888", 5);
 
-  if (!wfm.autoConnect("ESP32TEST_AP")) {
+  wfm.addParameter(&agent_ip_text_box);
+  wfm.addParameter(&agent_port_text_box);
+
+  if (!wfm.autoConnect()) {
     // Did not connect, print error message
     Serial.println("failed to connect and hit timeout");
 
@@ -82,46 +71,34 @@ void setup() {
   }
 
   // Connected!
-  Serial.println("WiFi connected");
+  Serial.println("WiFi connected!");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+  
+  // Print custom text box value to serial monitor
+  Serial.print("Agent IP: ");
+  Serial.println(agent_ip_text_box.getValue());
+  Serial.print("Agent Port: ");
+  Serial.println(agent_port_text_box.getValue());
 
   //Serial.println(WiFi.SSID());
   //Serial.println(WiFi.psk());
   
-  // Print custom text box value to serial monitor
-  //Serial.print("Custom text box entry: ");
-  //Serial.println(custom_text_box.getValue());
-
-  //char * ssid = str2ch(WiFi.SSID().c_str());
-  //char * passwd = str2ch(WiFi.psk().c_str());
-  
-  //const char * ssid = WiFi.SSID().c_str();
-  //const char * passwd = WiFi.psk().c_str();
-
-  const char * ssid_ = WiFi.SSID().c_str();
-  const char * passwd_ = WiFi.psk().c_str();
-
-  char ssid[] = "";
-  char passwd[] = "";
-  strcpy(ssid,ssid_);
-  strcpy(passwd,passwd_);
-  
-  const char * agent_ip = custom_text_box.getValue();
+  char* ssid = (char*)WiFi.SSID().c_str();
+  char* passwd = (char*)WiFi.psk().c_str();  
+  char* agent_ip = (char*)agent_ip_text_box.getValue();
+  uint agent_port = atoi(agent_port_text_box.getValue());
 
   //Serial.println(String(ssid));
   //Serial.println(String(passwd));
   //Serial.println(String(agent_ip));
-
-  Serial.println(ssid);
-  Serial.println(passwd);
-  Serial.println(agent_ip);
+  //Serial.println(String(agent_port));
   
   //WiFi.disconnect();
   
-  // micro-ROS setup
-  set_microros_wifi_transports("ToonDuck_2.4G", "up092723", "192.168.1.166", 8888);
-  //set_microros_wifi_transports(ssid, passwd, agent_ip, 8888);
+  //=============== micro-ROS setup ===============
+  //set_microros_wifi_transports("***", "***", "192.168.1.166", 8888);
+  set_microros_wifi_transports(ssid, passwd, agent_ip, agent_port);
 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
