@@ -69,7 +69,8 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
 
 RUN apt-get update --fix-missing && apt-get upgrade --fix-missing -y
 RUN apt-get install -y \
-    ros-${ROS_DISTRO}-desktop \
+    ros-${ROS_DISTRO}-desktop-full \
+    ros-${ROS_DISTRO}-rviz-imu-plugin \
     python3-rosdep \
     python3-colcon-common-extensions \
     && apt-get autoremove -y \
@@ -86,7 +87,7 @@ RUN curl https://bootstrap.pypa.io//get-pip.py | python3 - && \
         supervisor_twiddler
 
 # install nodejs
-RUN sh -c 'echo "deb https://deb.nodesource.com/node_16.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodesource.list' && \
+RUN sh -c 'echo "deb https://deb.nodesource.com/node_14.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodesource.list' && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
 RUN apt-get update && apt-get upgrade -y
@@ -193,6 +194,8 @@ VOLUME /tmp/.X11-unix
 COPY ./app /app
 
 COPY ./index.html /usr/share/novnc
+COPY ./test_imu.rviz /home/developer/
+COPY ./view_imu.sh /home/developer/
 
 RUN sudo chown -R developer:developer /app
 
