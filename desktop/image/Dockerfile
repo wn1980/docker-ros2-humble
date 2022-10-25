@@ -108,7 +108,7 @@ RUN apt-get install -y \
 # install code-server
 COPY ./app/install/code-server.sh /
 
-RUN /code-server.sh 4.5.1 && sudo rm -f /code-server.sh
+RUN /code-server.sh 3.12.0 && sudo rm -f /code-server.sh
 
 # init rosdep
 RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
