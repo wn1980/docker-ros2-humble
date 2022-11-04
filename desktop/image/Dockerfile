@@ -77,6 +77,11 @@ RUN apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# init rosdep
+RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
+    rosdep init && \
+    rm /etc/apt/apt.conf.d/docker-clean
+
 # update pip and install some packages
 RUN curl https://bootstrap.pypa.io//get-pip.py | python3 - && \
     #curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python - && \
@@ -108,12 +113,7 @@ RUN apt-get install -y \
 # install code-server
 COPY ./app/install/code-server.sh /
 
-RUN /code-server.sh 3.12.0 && sudo rm -f /code-server.sh
-
-# init rosdep
-RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
-    rosdep init && \
-    rm /etc/apt/apt.conf.d/docker-clean
+RUN /code-server.sh 4.8.2 && sudo rm -f /code-server.sh
 
 # setup user space
 RUN mkdir -p {/workspace,/app}
@@ -167,17 +167,17 @@ RUN echo "source /usr/share/bash-completion/bash_completion" >> ~/.bashrc && \
 RUN mkdir -p $HOME/dev_ws/src && \
     #bash /turtlebot2.sh && \
     #sudo rm -f /turtlebot2.sh && \
-    cd $HOME/dev_ws/src && \
+    #cd $HOME/dev_ws/src && \
     #git clone https://github.com/kobuki-base/kobuki_ros_interfaces.git && \
     #git clone https://github.com/YDLIDAR/ydlidar_ros2_driver.git && \
     #git clone https://github.com/wn1980/turtlebot2_ros2.git && \
     #git clone https://github.com/kobuki-base/kobuki_ros.git && \
 	#mv kobuki_ros/kobuki_description ./ && \
 	#rm -rf kobuki_ros && \
-    #cd $HOME/dev_ws && \
-    #sudo rosdep install -i --from-path src --rosdistro humble -y && \
-    #source /opt/ros/${ROS_DISTRO}/setup.bash && \
-    #colcon build --symlink-install && \
+    cd $HOME/dev_ws && \
+    sudo rosdep install -i --from-path src --rosdistro humble -y && \
+    source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    colcon build --symlink-install && \
     echo "DONE"
 
 # https://superuser.com/questions/555310/bash-save-history-without-exit
