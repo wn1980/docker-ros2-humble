@@ -58,6 +58,7 @@ RUN apt-get install -y \
 	portaudio19-dev \
 	ffmpeg \
 	alsa-utils \
+    i2c-dev \
     build-essential \
     && apt-get autoremove -y \
     && apt-get clean \
