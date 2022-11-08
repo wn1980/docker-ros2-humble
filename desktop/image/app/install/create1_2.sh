@@ -2,7 +2,7 @@
 
 set -e
 
-sudo apt update && sudo apt-get install -y ecl git
+sudo apt update && sudo apt-get install -y git
 
 TURTLEBOT_WS=$HOME/dev_ws
 

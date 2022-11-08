@@ -26,7 +26,7 @@ if [ ! -d $DEV_WS/src/ydlidar_ros2_driver ]; then
 
 fi
 
-sudo apt-get update && sudo apt-get upgrade -y 
+sudo apt-get update #&& sudo apt-get upgrade -y 
 
 # make and install
 cd $DEV_WS

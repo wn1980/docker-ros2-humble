@@ -31,7 +31,7 @@ else
   exit 0
 fi
 
-apt update && apt -y upgrade
+apt update #&& apt -y upgrade
 apt purge -y tigervnc-*
 apt install -y ./tigervnc.deb
 rm ./tigervnc.deb

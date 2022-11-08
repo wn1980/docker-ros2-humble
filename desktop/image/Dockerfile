@@ -112,9 +112,9 @@ RUN apt-get install -y \
 #RUN /no-vnc.sh && sudo rm -f /no-vnc.sh
 
 # install code-server
-COPY ./app/install/code-server.sh /
+#COPY ./app/install/code-server.sh /
 
-RUN /code-server.sh 4.8.2 && sudo rm -f /code-server.sh
+#RUN /code-server.sh 4.8.3 && sudo rm -f /code-server.sh
 
 # setup user space
 RUN mkdir -p {/workspace,/app}
@@ -135,9 +135,10 @@ ENV HOME /home/developer
 
 ENV SHELL /bin/bash
 
+#========== USER SPACE ==========#
 USER $USER
 
-WORKDIR /home/developer
+WORKDIR $HOME
 
 # init rosdep
 RUN rosdep fix-permissions && rosdep update
@@ -190,15 +191,18 @@ RUN echo "export PROMPT_COMMAND='history -a'" >> ~/.bashrc && \
     echo "export TURTLEBOT_3D_SENSOR=asus_xtion_pro" >> ~/.bashrc && \
     echo "export TURTLEBOT_MAP_FILE=~/workspace/maps/map.yaml" >> ~/.bashrc
 
-VOLUME /tmp/.X11-unix
-
-COPY ./app /app
-
 COPY ./index.html /usr/share/novnc
 COPY ./test_imu.rviz /home/developer/
 COPY ./view_imu.sh /home/developer/
 
+COPY ./app /app
 RUN sudo chown -R developer:developer /app
+
+#fix code-server cert.
+RUN /app/install/code-server.sh 4.8.3
+RUN /app/install/fix-code-server-cert.sh
+
+VOLUME /tmp/.X11-unix
 
 ENV DISPLAY ":9"
 

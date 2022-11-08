@@ -19,7 +19,7 @@ if [ ! -d $DEV_WS/src/odrive_ros2_control ]; then
 
 fi
 
-sudo apt-get update && sudo apt-get upgrade -y 
+sudo apt-get update #&& sudo apt-get upgrade -y 
 
 # make and install
 cd $DEV_WS
