@@ -198,9 +198,9 @@ COPY ./view_imu.sh /home/developer/
 COPY ./app /app
 RUN sudo chown -R developer:developer /app
 
-#fix code-server cert.
-RUN /app/install/code-server.sh 4.8.3
-RUN /app/install/fix-code-server-cert.sh
+# install & fix code-server cert.
+RUN /app/install/code-server.sh 4.8.3 && \
+    /app/install/fix-code-server-cert.sh
 
 VOLUME /tmp/.X11-unix
 
