@@ -196,7 +196,10 @@ COPY ./test_imu.rviz /home/developer/
 COPY ./view_imu.sh /home/developer/
 
 COPY ./app /app
-RUN sudo chown -R developer:developer /app
+RUN sudo chown -R developer:developer /app && \
+    sudo usermod -aG dialout developer && \
+    sudo usermod -aG i2c developer && \
+    sudo groupmod -g 998 i2c
 
 # install & fix code-server cert.
 RUN /app/install/code-server.sh 4.8.3 && \
