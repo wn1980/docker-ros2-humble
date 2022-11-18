@@ -22,7 +22,7 @@ if [ ! -d $ROS_WS/src/kobuki_ros ]; then
 
 fi
 
-sudo apt-get update && sudo apt-get upgrade -y 
+sudo apt-get update #&& sudo apt-get upgrade -y 
 
 # make and install
 cd $ROS_WS
