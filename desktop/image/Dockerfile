@@ -191,9 +191,14 @@ RUN echo "export PROMPT_COMMAND='history -a'" >> ~/.bashrc && \
     echo "export TURTLEBOT_3D_SENSOR=asus_xtion_pro" >> ~/.bashrc && \
     echo "export TURTLEBOT_MAP_FILE=~/workspace/maps/map.yaml" >> ~/.bashrc
 
-COPY ./index.html /usr/share/novnc
 COPY ./test_imu.rviz /home/developer/
 COPY ./view_imu.sh /home/developer/
+
+COPY ./index.html /usr/share/novnc
+COPY ./app/install/code-server.sh /app/install/
+
+# install code-server cert.
+RUN /app/install/code-server.sh 4.8.3
 
 COPY ./app /app
 RUN sudo chown -R developer:developer /app && \
@@ -201,9 +206,8 @@ RUN sudo chown -R developer:developer /app && \
     sudo usermod -aG i2c developer && \
     sudo groupmod -g 998 i2c
 
-# install & fix code-server cert.
-RUN /app/install/code-server.sh 4.8.3 && \
-    /app/install/fix-code-server-cert.sh
+# fix code-server cert.
+RUN /app/install/fix-code-server-cert.sh
 
 VOLUME /tmp/.X11-unix
 
