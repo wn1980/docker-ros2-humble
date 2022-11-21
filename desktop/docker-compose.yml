@@ -13,7 +13,7 @@ services:
 
   micro-ROS-agent:
     image: microros/micro-ros-agent:humble
-    container_name: ros2_micro_ros_agent
+    container_name: ros2_micro_ros_agent_humble
     init: true
     restart: unless-stopped
     privileged: true
