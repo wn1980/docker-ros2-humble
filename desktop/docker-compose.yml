@@ -29,7 +29,7 @@ services:
     command: udp4 --port 8888
 
   ros2:
-    build: ./image
+    #build: ./image
     image: wn1980/ros2-humble${TAG}
     container_name: ros2_humble
     init: true
