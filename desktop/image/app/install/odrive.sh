@@ -4,6 +4,8 @@ set -e
 
 sudo apt update && sudo apt-get install -y git
 
+sudo pip install odrive==0.5.4
+
 DEV_WS=$HOME/dev_ws
 
 if [ ! -d $DEV_WS/src/odrive_ros2_control ]; then
